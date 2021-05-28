@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:1.14.1
+    ports:
+      - "81:80"
+      - "443:443"
+    volumes:
+      - ./conf/nginx:/etc/nginx/conf.d
+      - ./src:/usr/share/nginx/html
+    links:
+      - php
+  php:
+    build: ./conf/php
+    volumes:
+      - ./src:/usr/share/nginx/html
+      - ./conf/php/php.ini:/usr/local/etc/php/php.ini
+  owncloud:
+    image: owncloud
+    ports:
+      - 82:80
+    volumes:
+      - ./src:/usr/share/nginx/html
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:80"
+    volumes:
+      - ./data:/var/lib/mysql
+
